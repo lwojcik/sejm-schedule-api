@@ -1,5 +1,9 @@
 # sejm-schedule-api
 
+[![NPM Version](https://img.shields.io/npm/v/sejm-schedule-api)](https://www.npmjs.com/package/sejm-schedule-api)
+[![Build status](https://ci.appveyor.com/api/projects/status/r4alm64d2sk167g4/branch/main?svg=true)](https://ci.appveyor.com/project/lwojcik/sejm-schedule-api/branch/main)
+[![codecov](https://codecov.io/github/lwojcik/sejm-schedule-api/graph/badge.svg?token=Oox8MLfp8G)](https://codecov.io/github/lwojcik/sejm-schedule-api)
+
 A typed client for the schedule in the open API of the Polish Sejm (`api.sejm.gov.pl`): the plenary sittings, the committees and the committee sittings of a day. It reads what the API answers, checks it, and leaves out the records that make no sense. It has no dependencies and runs on Node 24 or newer.
 
 It covers the schedule only. It does not cover the MPs, the votes, the bills or the legal acts (the ELI API has packages of its own).
