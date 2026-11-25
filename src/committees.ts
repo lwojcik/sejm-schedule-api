@@ -17,9 +17,11 @@ const read = (record: unknown): Read<Committee> => {
   };
 };
 
+/** Parses the raw list from `/committees`. For when you fetch the data yourself. */
 export const parseCommittees = (records: unknown[]): Parsed<Committee> =>
   parseAll({ records, read });
 
+/** Map of committee code to genitive name, skipping committees without one. */
 export const genitiveNames = (committees: Committee[]) =>
   Object.fromEntries(
     committees
@@ -27,6 +29,11 @@ export const genitiveNames = (committees: Committee[]) =>
       .map(({ code, nameGenitive }) => [code, nameGenitive]),
   );
 
+/**
+ * Genitive name of a committee for use in a sentence. A subcommittee without
+ * a name of its own takes its parent's (`Podkomisji ENM02S Komisji ...`);
+ * an unknown code gives `komisji <code>`.
+ */
 export const committeeGenitive = ({
   code,
   names,

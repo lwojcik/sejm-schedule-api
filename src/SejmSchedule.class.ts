@@ -17,6 +17,15 @@ import type {
 const DEFAULT_TERM = 10;
 const DEFAULT_BASE_URL = 'https://api.sejm.gov.pl';
 
+/**
+ * Client for the schedule in the Sejm's open API (`api.sejm.gov.pl`).
+ * Read-only. Every method returns validated data; malformed records are
+ * dropped and reported through `onInvalid`.
+ *
+ * @example
+ * const sejm = new SejmSchedule({ term: 10 });
+ * const sittings = await sejm.committeeSittings('2026-11-18');
+ */
 export class SejmSchedule {
   private readonly termUrl: string;
   private readonly getJson: GetJson;
@@ -33,6 +42,7 @@ export class SejmSchedule {
     this.onInvalid = onInvalid;
   }
 
+  /** Plenary sittings of the term. Records with unreadable dates are left out. */
   async proceedings(): Promise<Proceeding[]> {
     return this.list({
       url: `${this.termUrl}/proceedings`,
@@ -40,12 +50,14 @@ export class SejmSchedule {
     });
   }
 
+  /** The plenary sitting under way, or `null` if there is none. */
   async currentProceeding(): Promise<Proceeding | null> {
     const proceedings = await this.proceedings();
 
     return proceedings.find(({ isCurrent }) => isCurrent) ?? null;
   }
 
+  /** The committees of the term (no subcommittees). */
   async committees(): Promise<Committee[]> {
     return this.list({
       url: `${this.termUrl}/committees`,
@@ -53,6 +65,11 @@ export class SejmSchedule {
     });
   }
 
+  /**
+   * Committee sittings of one day.
+   * @param date Day as `YYYY-MM-DD`.
+   * @throws {SejmApiError} on a non-2xx answer or a non-list body.
+   */
   async committeeSittings(
     date: string,
     { cancelled = false }: SittingsOptions = {},

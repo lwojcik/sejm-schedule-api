@@ -15,6 +15,10 @@ const hostOf = ({
     .map(keyOf)
     .toSorted((first, second) => first.localeCompare(second))[0];
 
+/**
+ * Collapses joint sittings that the API lists on both sides into one
+ * `Meeting` each. A joint sitting listed on one side only is kept as is.
+ */
 export const mergeJointSittings = (sittings: CommitteeSitting[]): Meeting[] => {
   const present = new Set(sittings.map(keyOf));
 
