@@ -34,6 +34,21 @@ describe('SejmSchedule', () => {
     ]);
   });
 
+  it('gives the proceeding that is current, or null when none is', async () => {
+    const current = proceeding({ number: 8, current: true });
+
+    expect(
+      await new SejmSchedule({
+        getJson: answers([proceeding(), current]),
+      }).currentProceeding(),
+    ).toMatchObject({ number: 8, isCurrent: true });
+    expect(
+      await new SejmSchedule({
+        getJson: answers([proceeding()]),
+      }).currentProceeding(),
+    ).toBeNull();
+  });
+
   it('takes another term and another host', async () => {
     const getJson = answers([]);
 
