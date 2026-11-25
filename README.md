@@ -35,6 +35,7 @@ const sittings = await sejm.committeeSittings('2026-11-18');
 - **`new SejmSchedule({ term, baseUrl, getJson, onInvalid })`**: `term` is the term of the Sejm (10 by default), `baseUrl` is `https://api.sejm.gov.pl` by default.
 - **`proceedings()`** gives the plenary sittings of the term. A sitting that is planned has `number: 0` until it starts, so do not take the number for a key. The `dates` are sorted. A record whose dates cannot be read is left out.
 - **`currentProceeding()`** gives the plenary sitting that is under way (the one the API marks as current), or `null` when there is none.
+- **`nextProceeding(from?)`** gives the first plenary sitting that has not ended by `from` (`YYYY-MM-DD`, today in Warsaw by default), so a sitting running on that day counts. It gives `null` when every sitting is over.
 - **`committees()`** gives the code, the name and the name in the genitive of each committee. A subcommittee (`ENM02S`) is not in the list.
 - **`committeeSittings(date, { cancelled })`** gives the sittings of one day, as `YYYY-MM-DD`; `cancelled: true` adds the cancelled ones. `start` and `end` are `HH:MM` or `null`. `agendaHtml` is the agenda as the API gives it, in HTML, and it is empty for a closed sitting that has none.
 - **`onInvalid({ record, reason })`** is called for every record that was left out, so you can log it.

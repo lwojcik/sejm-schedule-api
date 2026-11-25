@@ -11,6 +11,7 @@ const sejm = new SejmSchedule({ term: 10, onInvalid: ({ reason }) => console.war
 
 await sejm.proceedings();                      // Proceeding[]  plenary sittings
 await sejm.currentProceeding();                // Proceeding | null
+await sejm.nextProceeding();                   // Proceeding | null  first not yet ended (optional 'YYYY-MM-DD' from)
 await sejm.committees();                       // Committee[]   no subcommittees
 await sejm.committeeSittings('2026-11-18');    // CommitteeSitting[] for one day (YYYY-MM-DD)
 await sejm.committeeSittings('2026-11-18', { cancelled: true }); // include cancelled

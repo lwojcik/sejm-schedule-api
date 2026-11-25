@@ -49,6 +49,38 @@ describe('SejmSchedule', () => {
     ).toBeNull();
   });
 
+  it('gives the first proceeding that has not ended yet, or null', async () => {
+    const past = proceeding({ number: 6, dates: ['2026-10-01'] });
+    const running = proceeding({
+      number: 7,
+      dates: ['2026-11-18', '2026-11-20'],
+    });
+    const later = proceeding({ number: 0, dates: ['2026-12-02'] });
+    const sejm = new SejmSchedule({ getJson: answers([later, past, running]) });
+
+    expect(await sejm.nextProceeding('2026-11-19')).toMatchObject({
+      number: 7,
+    });
+    expect(await sejm.nextProceeding('2026-11-21')).toMatchObject({
+      number: 0,
+    });
+    expect(await sejm.nextProceeding('2026-12-03')).toBeNull();
+  });
+
+  it('looks for the next proceeding from today in Warsaw by default', async () => {
+    vi.useFakeTimers({ now: new Date('2026-11-20T23:30:00Z') });
+
+    const sejm = new SejmSchedule({
+      getJson: answers([
+        proceeding({ number: 7, dates: ['2026-11-20'] }),
+        proceeding({ number: 8, dates: ['2026-12-02'] }),
+      ]),
+    });
+
+    expect(await sejm.nextProceeding()).toMatchObject({ number: 8 });
+    vi.useRealTimers();
+  });
+
   it('takes another term and another host', async () => {
     const getJson = answers([]);
 
