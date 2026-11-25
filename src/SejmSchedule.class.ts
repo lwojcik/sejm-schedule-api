@@ -17,6 +17,22 @@ import type {
 const DEFAULT_TERM = 10;
 const DEFAULT_BASE_URL = 'https://api.sejm.gov.pl';
 
+const warsawDate = new Intl.DateTimeFormat('en', {
+  timeZone: 'Europe/Warsaw',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+/** Today in Warsaw as `YYYY-MM-DD`. */
+const today = (): string => {
+  const { year, month, day } = Object.fromEntries(
+    warsawDate.formatToParts().map(({ type, value }) => [type, value]),
+  );
+
+  return `${year}-${month}-${day}`;
+};
+
 /**
  * Client for the schedule in the Sejm's open API (`api.sejm.gov.pl`).
  * Read-only. Every method returns validated data; malformed records are
@@ -55,6 +71,23 @@ export class SejmSchedule {
     const proceedings = await this.proceedings();
 
     return proceedings.find(({ isCurrent }) => isCurrent) ?? null;
+  }
+
+  /**
+   * The first plenary sitting that has not ended by `from`, so one running on
+   * that day counts. `null` if every sitting is over.
+   * @param from Day as `YYYY-MM-DD`. Defaults to today in Warsaw.
+   */
+  async nextProceeding(from = today()): Promise<Proceeding | null> {
+    const proceedings = await this.proceedings();
+
+    return (
+      proceedings
+        .filter(({ dates }) => dates.some((date) => date >= from))
+        .toSorted((first, second) =>
+          first.dates[0].localeCompare(second.dates[0]),
+        )[0] ?? null
+    );
   }
 
   /** The committees of the term (no subcommittees). */
