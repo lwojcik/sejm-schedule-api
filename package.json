@@ -1,6 +1,6 @@
 {
   "name": "sejm-schedule-api",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A typed client for the schedule in the Sejm's open API: plenary sittings, committees and committee sittings, read and checked, with joint sittings merged.",
   "keywords": [
     "sejm",
