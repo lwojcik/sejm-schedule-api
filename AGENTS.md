@@ -17,5 +17,5 @@ Run test, typecheck, lint and format:check before finishing.
 - Commits follow Conventional Commits (commitlint enforces it); `npm run commit` is the guided prompt. Releases are cut with release-it — do not bump versions by hand.
 - Parsers never throw on bad records: they return `{ items, invalid }`. A new field must be read defensively in `read()` and covered in `test/parse.test.ts`.
 - Network goes through the injectable `getJson`; tests use fakes (see `test/helpers.ts`), never the live API.
-- Comments are banned by lint. When the public API changes, update README.md and llms.txt in the same change.
+- Only `/** */` doc comments are allowed (in `src/`); other comments are banned by lint. Anything exported from `index.ts` needs one, and README.md and llms.txt must be updated in the same change.
 - API shapes come from the OpenAPI description at `https://api.sejm.gov.pl/sejm/openapi/`.
