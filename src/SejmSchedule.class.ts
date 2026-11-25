@@ -40,6 +40,12 @@ export class SejmSchedule {
     });
   }
 
+  async currentProceeding(): Promise<Proceeding | null> {
+    const proceedings = await this.proceedings();
+
+    return proceedings.find(({ isCurrent }) => isCurrent) ?? null;
+  }
+
   async committees(): Promise<Committee[]> {
     return this.list({
       url: `${this.termUrl}/committees`,
