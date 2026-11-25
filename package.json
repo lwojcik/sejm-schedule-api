@@ -11,7 +11,9 @@
     "schedule",
     "committees",
     "typescript",
-    "pl"
+    "pl",
+    "llms",
+    "ai-agents"
   ],
   "license": "MIT",
   "author": "Łukasz Wójcik",
@@ -26,7 +28,8 @@
     "node": ">=24"
   },
   "files": [
-    "dist"
+    "dist",
+    "llms.txt"
   ],
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -35,7 +38,8 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./llms.txt": "./llms.txt"
   },
   "scripts": {
     "prepare": "husky",

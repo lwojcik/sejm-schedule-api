@@ -47,9 +47,11 @@ const read = (record: unknown): Read<CommitteeSitting> => {
   };
 };
 
+/** Parses the raw list from `/committees/sittings/{date}`. For when you fetch the data yourself. */
 export const parseCommitteeSittings = (
   records: unknown[],
 ): Parsed<CommitteeSitting> => parseAll({ records, read });
 
+/** True if the sitting's `status` says it was cancelled (English or Polish). */
 export const isCancelled = (sitting: Pick<CommitteeSitting, 'status'>) =>
   CANCELLED.test(sitting.status);

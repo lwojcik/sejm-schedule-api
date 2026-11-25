@@ -22,5 +22,6 @@ const read = (record: unknown): Read<Proceeding> => {
   };
 };
 
+/** Parses the raw list from `/proceedings`. For when you fetch the data yourself. */
 export const parseProceedings = (records: unknown[]): Parsed<Proceeding> =>
   parseAll({ records, read });

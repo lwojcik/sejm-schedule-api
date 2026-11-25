@@ -48,6 +48,10 @@ A joint sitting of committees is listed once by the API, under one of them, and 
 
 `parseProceedings`, `parseCommittees` and `parseCommitteeSittings` take the list the API answered and give `{ items, invalid }`, for when you fetch the data yourself.
 
+## For AI agents
+
+The package ships [`llms.txt`](llms.txt) (also at `sejm-schedule-api/llms.txt`): a compact summary of the API and its gotchas. Contributors, human or not, should start with [`AGENTS.md`](AGENTS.md).
+
 ## Development
 
 ```sh

@@ -1,3 +1,4 @@
+/** Thrown when the API answers badly. `status` is `null` when there was no HTTP status (e.g. the answer was not a list). */
 export class SejmApiError extends Error {
   readonly url: string;
   readonly status: number | null;

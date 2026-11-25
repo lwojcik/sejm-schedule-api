@@ -1,0 +1,43 @@
+# sejm-schedule-api
+
+> Typed, dependency-free TypeScript client (ESM, Node >= 24) for the schedule of the Polish Sejm: plenary sittings, committees and committee sittings. Read-only, unofficial. It validates API answers and drops malformed records instead of throwing. It does not cover MPs, votes, bills or legal acts.
+
+## Quick start
+
+```ts
+import { SejmSchedule } from 'sejm-schedule-api';
+
+const sejm = new SejmSchedule({ term: 10, onInvalid: ({ reason }) => console.warn(reason) });
+
+await sejm.proceedings();                      // Proceeding[]  plenary sittings
+await sejm.currentProceeding();                // Proceeding | null
+await sejm.committees();                       // Committee[]   no subcommittees
+await sejm.committeeSittings('2026-11-18');    // CommitteeSitting[] for one day (YYYY-MM-DD)
+await sejm.committeeSittings('2026-11-18', { cancelled: true }); // include cancelled
+```
+
+## Exports
+
+- `SejmSchedule` — class; options `{ term = 10, baseUrl = 'https://api.sejm.gov.pl', getJson, onInvalid }`.
+- `SejmApiError` — thrown on non-2xx or a non-list body; has `status: number | null` and `url`.
+- `mergeJointSittings(sittings): Meeting[]` — one `{ sitting, codes }` per joint sitting listed on both sides.
+- `isCancelled(sitting): boolean` — tests `status` for "cancel"/"odwo".
+- `genitiveNames(committees)`, `committeeGenitive({ code, names })` — Polish genitive names; subcommittees fall back to their parent.
+- `parseProceedings`, `parseCommittees`, `parseCommitteeSittings` — take a raw list, return `{ items, invalid }`; for when you fetch the data yourself.
+- Types: `Proceeding`, `Committee`, `CommitteeSitting`, `JointPartner`, `Meeting`, `Parsed`, `Invalid`, `GetJson`, `OnInvalid`, `SejmScheduleOptions`, `SittingsOptions`.
+
+## Gotchas
+
+- `Proceeding.number` is `0` for a planned sitting; do not use it as a key.
+- `CommitteeSitting` is identified by `code` + `num`, not `num` alone.
+- `start`/`end` are `HH:MM` strings as the API wrote them (no timezone handling) or `null`.
+- `agendaHtml` is raw, unsanitised HTML; empty for a closed sitting with no agenda.
+- `status` is free text; use `isCancelled()` rather than comparing strings.
+- A joint sitting is listed once under one committee, with the others in `jointWith`.
+- Cancelled sittings are excluded unless `cancelled: true`.
+- The API is public with no key; pass a custom `getJson` for pacing, retries or caching.
+
+## Docs
+
+- [README](https://github.com/lwojcik/sejm-schedule-api#readme)
+- [Sejm API OpenAPI description](https://api.sejm.gov.pl/sejm/openapi/)
